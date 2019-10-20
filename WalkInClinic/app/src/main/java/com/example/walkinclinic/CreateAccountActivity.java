@@ -13,6 +13,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,8 +38,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,14 +71,14 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     }
 
 
-    private void registerUser() {
+    private void registerUser()throws NoSuchAlgorithmException{
         final String email1 = email.getText().toString().trim();
         final String password1 = password.getText().toString().trim();
         final String firstName1 = firstName.getText().toString().trim();
         final String lastName1 = lastName.getText().toString().trim();
         final String role1 = mspinner.getSelectedItem().toString();;
 
-        final Person person = new Person(firstName1, lastName1, password1, email1, role1);
+        final Person person = new Person(firstName1, lastName1, buildHash(password1), email1, role1);
 
         myRef = FirebaseDatabase.getInstance().getReference().child("Persons");
 
@@ -117,8 +119,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             return;
         }
 
-
-
         mAuth.createUserWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -147,11 +147,30 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     }
 
+    private String buildHash(String input) throws NoSuchAlgorithmException{
+
+
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] digest = md.digest(input.getBytes(StandardCharsets.US_ASCII));
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+
+    }
+
+
     @Override
-    public void onClick(View view) {
+    public void onClick(View view){
         switch (view.getId()) {
             case R.id.signUpButton:
-                registerUser();
+                try {
+                    registerUser();
+                } catch (NoSuchAlgorithmException csne){
+                    throw new java.lang.IllegalStateException("Unexpected value: " + view.getId());
+                }
                 break;
 
             case R.id.loginHereText:

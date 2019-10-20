@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">WalkInClinic</string>
+
+    <string-array name="names">
+        <item>Patient</item>
+        <item>Employee</item>
+    </string-array>
+</resources>

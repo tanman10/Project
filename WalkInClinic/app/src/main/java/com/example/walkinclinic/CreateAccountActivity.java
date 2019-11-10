@@ -1,6 +1,7 @@
 package com.example.walkinclinic;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -72,15 +74,18 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
 
     private void registerUser()throws NoSuchAlgorithmException{
-        final String email1 = email.getText().toString().trim();
-        final String password1 = password.getText().toString().trim();
-        final String firstName1 = firstName.getText().toString().trim();
-        final String lastName1 = lastName.getText().toString().trim();
-        final String role1 = mspinner.getSelectedItem().toString();;
 
-        final Person person = new Person(firstName1, lastName1, buildHash(password1), email1, role1);
 
         myRef = FirebaseDatabase.getInstance().getReference().child("Persons");
+
+
+        final String email1 = email.getText().toString().trim();
+        final String password1 = buildHash(password.getText().toString().trim());
+        final String firstName1 = firstName.getText().toString().trim();
+        final String lastName1 = lastName.getText().toString().trim();
+        final String role1 = mspinner.getSelectedItem().toString();
+
+
 
         // minimum conditions for creating an account
         if (email1.isEmpty()) {
@@ -124,6 +129,8 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
+                    final String id = mAuth.getUid();
+                    final Person person = new Person(firstName1, lastName1, password1, email1, role1, id);
                     mDatabase.getReference("Persons")           // this sets the name of the child in the database
                             .child(mAuth.getUid()).setValue(person)     // this write to the database
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -131,7 +138,9 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()){
+
                                         finish();
+                                        Toast.makeText(CreateAccountActivity.this, "Account created", Toast.LENGTH_LONG).show();
                                         // after successful login and write go to next activity
                                         startActivity(new Intent(CreateAccountActivity.this, ProfileActivity.class));
                                     } else{

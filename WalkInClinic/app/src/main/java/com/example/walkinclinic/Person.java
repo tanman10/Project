@@ -33,6 +33,7 @@ public class Person {
     private String role;
     private String password;
     private String email;
+    private String id;
     private String gender;
     private String age;
     private String username;
@@ -40,15 +41,27 @@ public class Person {
 
 
     public Person (String firstName, String lastName, String password,
-                   String email, String role){
+                   String email, String role, String id){
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.id = id;
     }
 
     public Person(){ };
+
+
+
+
+    public String getId(){
+        return id;
+    }
+
+    public void setId(String id){
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;

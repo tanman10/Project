@@ -1,10 +1,12 @@
 package com.example.walkinclinic;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +16,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -23,6 +31,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // create the space to save the inputted text
     EditText email;
     EditText password;
+
+    private FirebaseUser mUser;
+    private DatabaseReference myRef;
+
+    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +54,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // initialize buttons/clickable field to click
         findViewById(R.id.createAccountText).setOnClickListener(this);
         findViewById(R.id.loginButton).setOnClickListener(this);
-
-
     }
 
 
     // send fields to database
     private void Login() {
         // convert the initialized space from type EditText to String
-        String email1 = email.getText().toString().trim();
+        final String email1 = email.getText().toString().trim();
         String password1 = password.getText().toString().trim();
 
         // validation fields
         if (email1.isEmpty()) {
+
             email.setError("Email is required");
             email.requestFocus();
             return;
@@ -78,18 +90,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if (task.isSuccessful()) {
-                    finish();
+                    final FirebaseUser mUser = mAuth.getCurrentUser();
+                    if(mUser == null){
+                        finish();
+                    } else {
+                        final String currentUserId = mUser.getUid();
+                        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+                        // connect the space with the intermediary : activity <-> space <-> Database
+                        myRef.child("Persons").child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()) {
 
-                    // grab the account type than go through an if statement to put the appropriate string in("Profile"+String+"Activity.class")
-                    // or if i name them properly ("Profile"+getAccountType()+"Activity.class")
-                    // but than again maybe thats a bad idea and i should just have the onCreate method load a different activity to match the account type
+                                    // tell the database and activity which class they're working with
+                                    Person person = dataSnapshot.getValue(Person.class);
 
-                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                                    if(person.getEmail().equals("fakeemail@gmail.com")){
+                                        finish();
+                                        Intent intent = new Intent(MainActivity.this, NavigationDrawer.class);
+                                        //clear the top of the stack
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }else{
+                                        finish();
+                                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
 
-                    //clear the top of the stack
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                                        //clear the top of the stack
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+
                 } else {
                     Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -105,7 +147,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (mAuth.getCurrentUser() != null) {
             finish();
             startActivity(new Intent(this, ProfileActivity.class));
+            // need to change this to send user to the correct profile activity
+            //
+            //
+
+            ///
+
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            ///
+            //
+
+            //
+            //
+
+            ///
+            //
+            //
         }
+
     }
 
 

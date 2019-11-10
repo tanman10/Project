@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_role">WalkInClinic</string>
+
+    <string-array name="names2">
+        <item>Doctor</item>
+        <item>Nurse</item>
+        <item>Staff</item>
+    </string-array>
+
+</resources>

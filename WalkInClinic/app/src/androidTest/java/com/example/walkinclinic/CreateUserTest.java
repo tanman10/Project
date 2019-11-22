@@ -38,13 +38,13 @@ public class CreateUserTest {
 
     @Test
     public void createAccountIsValid() throws Exception{
-        onView(withId(R.id.firstNameTextField)).perform(typeText("last"), closeSoftKeyboard());
-        onView(withId(R.id.lastNameTextField)).perform(typeText("name"), closeSoftKeyboard());
-        onView(withId(R.id.emailTextField)).perform(typeText("lastname9@gmail.com"), closeSoftKeyboard());
-        onView(withId(R.id.passwordTextField)).perform(typeText("123456"), closeSoftKeyboard());
-        onView(withId(R.id.roleTextField)).perform(click());
+        onView(withId(R.id.signUpfirstNameTextField)).perform(typeText("last"), closeSoftKeyboard());
+        onView(withId(R.id.signUplastNameTextField)).perform(typeText("name"), closeSoftKeyboard());
+        onView(withId(R.id.signUpemailTextField)).perform(typeText("lastname9@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.signUppasswordTextField)).perform(typeText("123456"), closeSoftKeyboard());
+        onView(withId(R.id.signUproleTextField)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Employee"))).perform(click());
-        onView(withId(R.id.roleTextField)).check(matches(withSpinnerText(containsString("Employee"))));
+        onView(withId(R.id.signUproleTextField)).check(matches(withSpinnerText(containsString("Employee"))));
         onView(withId(R.id.signUpButton)).perform(click());
         onView(withText("Account created")).inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 

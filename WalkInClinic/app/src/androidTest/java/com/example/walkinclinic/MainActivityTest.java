@@ -26,7 +26,7 @@ public class MainActivityTest {
     @Test
     @UiThreadTest
     public void checkFirstName() throws Exception {
-        text = mActivity.findViewById(R.id.emailTextField);
+        text = mActivity.findViewById(R.id.signUpemailTextField);
         text.setText("user1");
         String name = text.getText().toString();
         assertNotEquals("user", name);

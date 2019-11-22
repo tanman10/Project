@@ -29,13 +29,11 @@ import com.google.firebase.database.FirebaseDatabase;
 public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener{
 
 
-    private EditText firstName;
-    private EditText lastName;
-    private EditText password;
-    private EditText email;
-    private Person person;
-    private String role;
-    private Spinner mspinner;
+    private EditText signUpfirstName;
+    private EditText signUplastName;
+    private EditText signUppassword;
+    private EditText signUpemail;
+    private Spinner signUpmspinner;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -46,18 +44,18 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
-        mspinner = (Spinner)findViewById(R.id.roleTextField);
+        signUpmspinner = (Spinner)findViewById(R.id.signUproleTextField);
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(CreateAccountActivity.this,
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.names));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mspinner.setAdapter(myAdapter);
+        signUpmspinner.setAdapter(myAdapter);
 
 
         // assign text input to variable
-        email = (EditText) findViewById(R.id.emailTextField);
-        password = (EditText) findViewById(R.id.passwordTextField);
-        firstName = (EditText) findViewById(R.id.firstNameTextField);
-        lastName = (EditText) findViewById(R.id.lastNameTextField);
+        signUpemail = (EditText) findViewById(R.id.signUpemailTextField);
+        signUppassword = (EditText) findViewById(R.id.signUppasswordTextField);
+        signUpfirstName = (EditText) findViewById(R.id.signUpfirstNameTextField);
+        signUplastName = (EditText) findViewById(R.id.signUplastNameTextField);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -75,79 +73,71 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     private void registerUser()throws NoSuchAlgorithmException{
 
-
         myRef = FirebaseDatabase.getInstance().getReference().child("Persons");
 
-
-        final String email1 = email.getText().toString().trim();
-        final String password1 = buildHash(password.getText().toString().trim());
-        final String firstName1 = firstName.getText().toString().trim();
-        final String lastName1 = lastName.getText().toString().trim();
-        final String role1 = mspinner.getSelectedItem().toString();
-
-
+        final String Createemail = signUpemail.getText().toString().trim();
+        final String Createpassword = buildHash(signUppassword.getText().toString().trim());
+        final String CreatefirstName = signUpfirstName.getText().toString().trim();
+        final String CreatelastName = signUplastName.getText().toString().trim();
+        final String Createrole = signUpmspinner.getSelectedItem().toString();
 
         // minimum conditions for creating an account
-        if (email1.isEmpty()) {
-            email.setError("Email is required");
-            email.requestFocus();
+        if (Createemail.isEmpty()) {
+            signUpemail.setError("Email is required");
+            signUpemail.requestFocus();
             return;
         }
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(email1).matches()) {
-            email.setError("Please enter a valid email");
-            email.requestFocus();
+        if (!Patterns.EMAIL_ADDRESS.matcher(Createemail).matches()) {
+            signUpemail.setError("Please enter a valid email");
+            signUpemail.requestFocus();
             return;
         }
 
-        if (password1.isEmpty()) {
-            password.setError("Password is required");
-            password.requestFocus();
+        if (Createpassword.isEmpty()) {
+            signUppassword.setError("Password is required");
+            signUppassword.requestFocus();
             return;
         }
 
-        if (password1.length() < 6) {
-            password.setError("Minimum length of password should be 6");
-            password.requestFocus();
+        if (Createpassword.length() < 6) {
+            signUppassword.setError("Minimum length of password should be 6");
+            signUppassword.requestFocus();
             return;
         }
 
-        if (firstName1.isEmpty()) {
-            firstName.setError("First name is required");
-            firstName.requestFocus();
+        if (CreatefirstName.isEmpty()) {
+            signUpfirstName.setError("First name is required");
+            signUpfirstName.requestFocus();
             return;
         }
 
-        if (lastName1.isEmpty()) {
-            lastName.setError("Last name is required");
-            lastName.requestFocus();
+        if (CreatelastName.isEmpty()) {
+            signUplastName.setError("Last name is required");
+            signUplastName.requestFocus();
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.createUserWithEmailAndPassword(Createemail, Createpassword).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
                     final String id = mAuth.getUid();
-                    final Person person = new Person(firstName1, lastName1, password1, email1, role1, id);
-                    mDatabase.getReference("Persons")           // this sets the name of the child in the database
-                            .child(mAuth.getUid()).setValue(person)     // this write to the database
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    final Person person = new Person(CreatefirstName, CreatelastName, Createpassword, Createemail, Createrole, id);
+                        mDatabase.getReference("Persons").child(mAuth.getUid()).setValue(person);
+                                            if(Createrole.equals("Employee")) {
+                                                finish();
+                                                Toast.makeText(CreateAccountActivity.this, "Account created", Toast.LENGTH_LONG).show();
+                                                // after successful login and write go to next activity
+                                                startActivity(new Intent(CreateAccountActivity.this, createClinic.class));
+                                            } else {
+                                                finish();
+                                                Toast.makeText(CreateAccountActivity.this, "Account created", Toast.LENGTH_LONG).show();
+                                                // after successful login and write go to next activity
+                                                startActivity(new Intent(CreateAccountActivity.this, ProfileActivity.class));
+                                            }
 
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-
-                                        finish();
-                                        Toast.makeText(CreateAccountActivity.this, "Account created", Toast.LENGTH_LONG).show();
-                                        // after successful login and write go to next activity
-                                        startActivity(new Intent(CreateAccountActivity.this, ProfileActivity.class));
-                                    } else{
-
-                                    }
-                                }
-                            });
                 } else {
 
                 }

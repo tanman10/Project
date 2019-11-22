@@ -11,7 +11,6 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -21,9 +20,9 @@ public class MainActivityTest2 {
             ActivityTestRule<>(MainActivity.class);
     @Test
     public void emailIsInvalid() {
-        onView(withId(R.id.passwordTextField)).perform(typeText("123456"), closeSoftKeyboard());
-        onView(withId(R.id.emailTextField)).perform(typeText("email@"), closeSoftKeyboard());
+        onView(withId(R.id.signUppasswordTextField)).perform(typeText("123456"), closeSoftKeyboard());
+        onView(withId(R.id.signUpemailTextField)).perform(typeText("email@"), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
-        onView(withId(R.id.emailTextField)).check(matches(hasErrorText("Please enter a valid email")));
+        onView(withId(R.id.signUpemailTextField)).check(matches(hasErrorText("Please enter a valid email")));
     }
 }

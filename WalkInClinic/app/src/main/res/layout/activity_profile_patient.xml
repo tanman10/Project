@@ -1,9 +1,478 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawable_layout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfilePatientActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <EditText
+                    android:id="@+id/namesync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="name"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/addresssync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="address"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/phonesync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="phone number"
+                    android:inputType="textPersonName" />
+
+                <Spinner
+                    android:id="@+id/insurancesync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/paymentsync"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/insurance_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/payment_method"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/workingHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/TheListOfServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <ListView
+                    android:id="@+id/listViewServices"
+                    android:layout_width="260dp"
+                    android:layout_height="200dp">
+
+                </ListView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp" />
+
+                <TextView
+                    android:id="@+id/YourServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <ListView
+                    android:id="@+id/listViewServicesAdded"
+                    android:layout_width="260dp"
+                    android:layout_height="200dp" >
+
+                </ListView>
+
+                <TextView
+                    android:id="@+id/NewMondayTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NewTuesdayTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHTU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMTU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHTU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMTU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NewWednesdayTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMW"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NewThursdayTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHTH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMTH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHTH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMTH"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NewFridayTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHF"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMF"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHF"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMF"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NewSaturdayTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHSA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMSA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHSA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMSA"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/NewSundayTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextView" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/NstartHSU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NstartMSU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Space
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0" />
+
+                    <Spinner
+                        android:id="@+id/NendHSU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+
+                    <Spinner
+                        android:id="@+id/NendMSU"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@null"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+        <include
+            android:id="@+id/mainToolbar2"
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </include>
+
+        <FrameLayout
+            android:id="@+id/container2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="start"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        app:menu="@menu/navigationmenu2" />
+</androidx.drawerlayout.widget.DrawerLayout>

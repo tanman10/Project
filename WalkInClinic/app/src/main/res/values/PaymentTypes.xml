@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_role2">WalkInClinic</string>
+
+    <string-array name="names3">
+        <item>Credit Only</item>
+        <item>Cash Only</item>
+        <item>Credit/Debit Only</item>
+        <item>All</item>
+    </string-array>
+</resources>

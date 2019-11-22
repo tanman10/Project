@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_role3">WalkInClinic</string>
+
+    <string-array name="names4">
+        <item>Life Insurance</item>
+        <item>Disability Insurance</item>
+        <item>Health Insurance</item>
+        <item>Dental Insurance</item>
+        <item>All Above</item>
+    </string-array>
+
+</resources>

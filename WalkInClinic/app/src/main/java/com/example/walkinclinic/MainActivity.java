@@ -1,12 +1,10 @@
 package com.example.walkinclinic;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -23,33 +21,30 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     //create this variable
-    FirebaseAuth mAuth;
+    FirebaseAuth loginmAuth;
 
     // create the space to save the inputted text
     EditText email;
     EditText password;
-
-    private FirebaseUser mUser;
-    private DatabaseReference myRef;
-
-    private String currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // Initialize this
-        mAuth = FirebaseAuth.getInstance();
+        loginmAuth = FirebaseAuth.getInstance();
 
         // Initialize the space with the inputted text as type EditText
-        email = (EditText) findViewById(R.id.emailTextField);
-        password = (EditText) findViewById(R.id.passwordTextField);
-
+        email = (EditText) findViewById(R.id.loginemailTextField);
+        password = (EditText) findViewById(R.id.loginpasswordTextField);
 
         // initialize buttons/clickable field to click
         findViewById(R.id.createAccountText).setOnClickListener(this);
@@ -58,46 +53,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     // send fields to database
-    private void Login() {
+    private void Login() throws NoSuchAlgorithmException{
         // convert the initialized space from type EditText to String
-        final String email1 = email.getText().toString().trim();
-        String password1 = password.getText().toString().trim();
+        String loginemail = email.getText().toString().trim();
+        String loginpassword = buildHash(password.getText().toString().trim());
 
         // validation fields
-        if (email1.isEmpty()) {
+        if (loginemail.isEmpty()) {
 
             email.setError("Email is required");
             email.requestFocus();
             return;
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email1).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(loginemail).matches()) {
             email.setError("Please enter a valid email");
             email.requestFocus();
             return;
         }
-        if (password1.isEmpty()) {
+        if (loginpassword.isEmpty()) {
             password.setError("Password is required");
             password.requestFocus();
             return;
         }
-        if (password1.length() < 6) {
+        if (loginpassword.length() < 6) {
             password.setError("Minimum length of password should be 6");
             password.requestFocus();
             return;
         }
 
         // predefined method for login
-        mAuth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        loginmAuth.signInWithEmailAndPassword(loginemail, loginpassword).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-                    final FirebaseUser mUser = mAuth.getCurrentUser();
+
+                    final FirebaseUser mUser = loginmAuth.getCurrentUser();
                     if(mUser == null){
                         finish();
                     } else {
                         final String currentUserId = mUser.getUid();
                         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+
                         // connect the space with the intermediary : activity <-> space <-> Database
                         myRef.child("Persons").child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -113,10 +110,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         //clear the top of the stack
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
-                                    }else{
-                                        finish();
-                                        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
 
+                                    }else if (person.getRole().equals("Employee")){
+                                        finish();
+                                        Intent intent = new Intent(MainActivity.this, createClinic.class);
+                                        //clear the top of the stack
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+
+                                    } else{
+                                        finish();
+                                        Intent intent = new Intent(MainActivity.this, ProfilePatientActivity.class);
                                         //clear the top of the stack
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
@@ -140,40 +144,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    private String buildHash(String input) throws NoSuchAlgorithmException {
+
+
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] digest = md.digest(input.getBytes(StandardCharsets.US_ASCII));
+
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digest) {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+
+    }
+
+
+
     // Just open the activity page if still logged in
     @Override
     protected void onStart() {
         super.onStart();
-        if (mAuth.getCurrentUser() != null) {
-            finish();
-            startActivity(new Intent(this, ProfileActivity.class));
-            // need to change this to send user to the correct profile activity
-            //
-            //
+        if (loginmAuth.getCurrentUser() != null) {
+            final FirebaseUser mUser = loginmAuth.getCurrentUser();
+            final String currentUserId = mUser.getUid();
+            final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
 
-            ///
+            // connect the space with the intermediary : activity <-> space <-> Database
+            myRef.child("Persons").child(currentUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()) {
 
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            ///
-            //
+                        // tell the database and activity which class they're working with
+                        Person person = dataSnapshot.getValue(Person.class);
 
-            //
-            //
+                        if(person.getEmail().equals("fakeemail@gmail.com")){
+                            finish();
+                            Intent intent = new Intent(MainActivity.this, NavigationDrawer.class);
+                            //clear the top of the stack
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
 
-            ///
-            //
-            //
+                        }else if (person.getRole().equals("Employee")){
+                            finish();
+                            Intent intent = new Intent(MainActivity.this, createClinic.class);
+                            //clear the top of the stack
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+
+                        } else{
+                            finish();
+                            Intent intent = new Intent(MainActivity.this, ProfilePatientActivity.class);
+                            //clear the top of the stack
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 
     }
@@ -181,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // tell the buttons/clickable fields what they do when clicked
     @Override
-    public void onClick(View view) {
+    public void onClick(View view){
         switch (view.getId()) {
             case R.id.createAccountText:
                 finish();
@@ -189,7 +223,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.loginButton:
-                Login();
+                try {
+                    Login();
+                } catch (NoSuchAlgorithmException csne){
+                    throw new java.lang.IllegalStateException("Unexpected value: " + view.getId());
+                }
                 break;
         }
     }
